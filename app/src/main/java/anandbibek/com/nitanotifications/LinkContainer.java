@@ -5,14 +5,21 @@ package anandbibek.com.nitanotifications;
  */
 public class LinkContainer {
     public String url, txt;
+    boolean isHeader = false;
 
-    LinkContainer(){
+    public LinkContainer(){
         url = "";
         txt = "";
     }
 
-    LinkContainer(String urlText, String urlAddress){
+    public LinkContainer(String urlText, String urlAddress){
         txt = urlText;
         url = urlAddress;
+    }
+
+    public LinkContainer(String urlText, String urlAddress, boolean header){
+        txt = urlText;
+        url = urlAddress;
+        isHeader = header;
     }
 }
