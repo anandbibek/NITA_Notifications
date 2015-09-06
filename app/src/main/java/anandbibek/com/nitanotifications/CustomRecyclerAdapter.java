@@ -37,12 +37,12 @@ public class CustomRecyclerAdapter extends RecyclerView.Adapter<CustomRecyclerAd
         public void setup(LinkContainer link){
             mText.setText(link.txt);
             if(link.isHeader){
-                mText.setTextSize(20);
+                mText.setTextSize(22);
                 mText.setTextColor(Color.WHITE);
                 mainView.setBackgroundResource(R.color.colorPrimary);
                 divider.setVisibility(View.GONE);
             } else {
-                mText.setTextSize(15);
+                mText.setTextSize(16);
                 mText.setTextColor(Color.BLACK);
                 mainView.setBackgroundResource(0);
                 divider.setVisibility(View.VISIBLE);

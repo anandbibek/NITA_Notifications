@@ -12,7 +12,7 @@ import anandbibek.com.nitanotifications.LinkContainer;
 /**
  * Created by Anand on 24-Aug-15.
  */
-public class Fetcher {
+public class FetcherMain {
 
     public ArrayList<LinkContainer> get(String url, String div, String markers) throws IOException {
 

@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import anandbibek.com.nitanotifications.fragments.AcademicNoticeFragment;
+import anandbibek.com.nitanotifications.fragments.EventsNoticeFragment;
 import anandbibek.com.nitanotifications.fragments.MainNoticeFragment;
 
 
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String BASE_URL = "http://www.nita.ac.in";
     public static final String ACADEMIC_URL = "http://www.nita.ac.in/NITAmain/academics/academicsNotice.html";
+    public static final String EVENTS_URL = "http://www.nita.ac.in/NITAmain/news--events/newseventshome.html";
     public static final String SAVE_KEY = "save_key";
 
     Toolbar toolbar;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new MainNoticeFragment(), "Main");
         adapter.addFrag(new AcademicNoticeFragment(), "Academic");
-        adapter.addFrag(new MainNoticeFragment(), "Events");
+        adapter.addFrag(new EventsNoticeFragment(), "Events");
         adapter.addFrag(new MainNoticeFragment(), "Upcoming");
         viewPager.setAdapter(adapter);
     }

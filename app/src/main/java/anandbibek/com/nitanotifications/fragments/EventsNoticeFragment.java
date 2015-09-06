@@ -12,21 +12,21 @@ import android.view.ViewGroup;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import anandbibek.com.nitanotifications.fetchers.FetcherMain;
+import anandbibek.com.nitanotifications.CustomRecyclerAdapter;
 import anandbibek.com.nitanotifications.LinkContainer;
 import anandbibek.com.nitanotifications.MainActivity;
 import anandbibek.com.nitanotifications.R;
-import anandbibek.com.nitanotifications.CustomRecyclerAdapter;
+import anandbibek.com.nitanotifications.fetchers.FetcherEvents;
 
 /**
  * Created by Anand on 24-Aug-15.
  */
-public class MainNoticeFragment extends Fragment {
+public class EventsNoticeFragment extends Fragment {
 
     CustomRecyclerAdapter adapter;
     RecyclerView recyclerView;
 
-    public MainNoticeFragment() {}
+    public EventsNoticeFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class MainNoticeFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.listfrag_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
         recyclerView.setHasFixedSize(true);
-        new AsyncFetcher().execute(MainActivity.BASE_URL);
+        new AsyncFetcher().execute(MainActivity.EVENTS_URL);
         return view;
     }
 
@@ -44,7 +44,7 @@ public class MainNoticeFragment extends Fragment {
         @Override
         protected ArrayList<LinkContainer> doInBackground(String... params) {
             try {
-                return new FetcherMain().get(params[0],"vmarquee","a[href]");
+                return new FetcherEvents().get(params[0]);
             } catch (IOException e) {
                 //TODO handle exceptions
                 e.printStackTrace();
