@@ -1,4 +1,4 @@
-package anandbibek.com.nitanotifications;
+package org.nita.notifications;
 
 /**
  * Created by Anand on 24-Aug-15.

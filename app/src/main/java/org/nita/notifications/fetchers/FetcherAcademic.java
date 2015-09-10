@@ -1,4 +1,4 @@
-package anandbibek.com.nitanotifications.fetchers;
+package org.nita.notifications.fetchers;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -7,7 +7,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import anandbibek.com.nitanotifications.LinkContainer;
+import org.nita.notifications.LinkContainer;
 
 /**
  * Created by Anand on 24-Aug-15.

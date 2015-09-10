@@ -1,4 +1,4 @@
-package anandbibek.com.nitanotifications;
+package org.nita.notifications;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

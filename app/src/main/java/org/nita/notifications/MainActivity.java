@@ -1,5 +1,6 @@
-package anandbibek.com.nitanotifications;
+package org.nita.notifications;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -8,9 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import anandbibek.com.nitanotifications.fragments.AcademicNoticeFragment;
-import anandbibek.com.nitanotifications.fragments.EventsNoticeFragment;
-import anandbibek.com.nitanotifications.fragments.MainNoticeFragment;
+import org.nita.notifications.fragments.AcademicNoticeFragment;
+import org.nita.notifications.fragments.EventsNoticeFragment;
+import org.nita.notifications.fragments.MainNoticeFragment;
+import org.nita.notifications.fragments.UpcomingNoticeFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String BASE_URL = "http://www.nita.ac.in";
     public static final String ACADEMIC_URL = "http://www.nita.ac.in/NITAmain/academics/academicsNotice.html";
     public static final String EVENTS_URL = "http://www.nita.ac.in/NITAmain/news--events/newseventshome.html";
+    public static final String UPCOMING_URL = "http://www.nita.ac.in/NITAmain/news--events/events.html";
     public static final String SAVE_KEY = "save_key";
 
     Toolbar toolbar;
@@ -37,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         setupViewPager(viewPager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -44,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFrag(new MainNoticeFragment(), "Main");
         adapter.addFrag(new AcademicNoticeFragment(), "Academic");
         adapter.addFrag(new EventsNoticeFragment(), "Events");
-        adapter.addFrag(new MainNoticeFragment(), "Upcoming");
+        adapter.addFrag(new UpcomingNoticeFragment(), "Upcoming");
         viewPager.setAdapter(adapter);
     }
 

@@ -1,4 +1,4 @@
-package anandbibek.com.nitanotifications.fragments;
+package org.nita.notifications.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,21 +12,21 @@ import android.view.ViewGroup;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import anandbibek.com.nitanotifications.CustomRecyclerAdapter;
-import anandbibek.com.nitanotifications.LinkContainer;
-import anandbibek.com.nitanotifications.MainActivity;
-import anandbibek.com.nitanotifications.R;
-import anandbibek.com.nitanotifications.fetchers.FetcherEvents;
+import org.nita.notifications.LinkContainer;
+import org.nita.notifications.MainActivity;
+import org.nita.notifications.R;
+import org.nita.notifications.CustomRecyclerAdapter;
+import org.nita.notifications.fetchers.FetcherAcademic;
 
 /**
  * Created by Anand on 24-Aug-15.
  */
-public class EventsNoticeFragment extends Fragment {
+public class AcademicNoticeFragment extends Fragment {
 
     CustomRecyclerAdapter adapter;
     RecyclerView recyclerView;
 
-    public EventsNoticeFragment() {}
+    public AcademicNoticeFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class EventsNoticeFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.listfrag_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
         recyclerView.setHasFixedSize(true);
-        new AsyncFetcher().execute(MainActivity.EVENTS_URL);
+        new AsyncFetcher().execute(MainActivity.ACADEMIC_URL);
         return view;
     }
 
@@ -44,7 +44,7 @@ public class EventsNoticeFragment extends Fragment {
         @Override
         protected ArrayList<LinkContainer> doInBackground(String... params) {
             try {
-                return new FetcherEvents().get(params[0]);
+                return new FetcherAcademic().get(params[0]);
             } catch (IOException e) {
                 //TODO handle exceptions
                 e.printStackTrace();

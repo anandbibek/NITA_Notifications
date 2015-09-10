@@ -1,8 +1,11 @@
-package anandbibek.com.nitanotifications;
+package org.nita.notifications;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +54,11 @@ public class CustomRecyclerAdapter extends RecyclerView.Adapter<CustomRecyclerAd
 
         @Override
         public void onClick(View v) {
-            //TODO
+            //String link = Uri.encode(mLinks.get(getLayoutPosition()).url);
+            String link = mLinks.get(getLayoutPosition()).url;
+            Log.d("URL", link);
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+            v.getContext().startActivity(browserIntent);
         }
     }
 

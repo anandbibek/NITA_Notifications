@@ -1,4 +1,4 @@
-package anandbibek.com.nitanotifications;
+package org.nita.notifications;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
