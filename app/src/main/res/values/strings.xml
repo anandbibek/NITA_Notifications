@@ -3,4 +3,9 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="category_latest">Latest</string>
+    <string name="category_academic">Academic</string>
+    <string name="category_events">Events</string>
+    <string name="category_upcoming">Upcoming</string>
+    <string name="category_tag">CATEGORY</string>
 </resources>

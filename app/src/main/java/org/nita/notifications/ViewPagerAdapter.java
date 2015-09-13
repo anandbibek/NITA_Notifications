@@ -1,5 +1,6 @@
 package org.nita.notifications;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -29,9 +30,13 @@ class ViewPagerAdapter extends FragmentPagerAdapter {
         return mFragmentList.size();
     }
 
-    public void addFrag(Fragment fragment, String title) {
+    public void addFrag(Fragment fragment, String category, String url) {
+        Bundle bundle = new Bundle();
+        bundle.putString(MainActivity.CATEGORY_TAG, category);
+        bundle.putString(MainActivity.URL_TAG, url);
+        fragment.setArguments(bundle);
         mFragmentList.add(fragment);
-        mFragmentTitleList.add(title);
+        mFragmentTitleList.add(category);
     }
 
     @Override

@@ -9,10 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.nita.notifications.fragments.AcademicNoticeFragment;
-import org.nita.notifications.fragments.EventsNoticeFragment;
 import org.nita.notifications.fragments.MainNoticeFragment;
-import org.nita.notifications.fragments.UpcomingNoticeFragment;
+import org.nita.notifications.gcm.RegistrationIntentService;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String ACADEMIC_URL = "http://www.nita.ac.in/NITAmain/academics/academicsNotice.html";
     public static final String EVENTS_URL = "http://www.nita.ac.in/NITAmain/news--events/newseventshome.html";
     public static final String UPCOMING_URL = "http://www.nita.ac.in/NITAmain/news--events/events.html";
+    public static final String CATEGORY_TAG = "CAT_TAG";
+    public static final String URL_TAG = "URL_TAG";
     public static final String SAVE_KEY = "save_key";
 
     Toolbar toolbar;
@@ -41,16 +41,18 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
+        //TODO handle registration gracefully
         Intent intent = new Intent(this, RegistrationIntentService.class);
         startService(intent);
     }
 
     private void setupViewPager(ViewPager viewPager) {
+        viewPager.setOffscreenPageLimit(3);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new MainNoticeFragment(), "Main");
-        adapter.addFrag(new AcademicNoticeFragment(), "Academic");
-        adapter.addFrag(new EventsNoticeFragment(), "Events");
-        adapter.addFrag(new UpcomingNoticeFragment(), "Upcoming");
+        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_latest), BASE_URL);
+        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_academic), ACADEMIC_URL);
+        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_events), EVENTS_URL);
+        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_upcoming), UPCOMING_URL);
         viewPager.setAdapter(adapter);
     }
 

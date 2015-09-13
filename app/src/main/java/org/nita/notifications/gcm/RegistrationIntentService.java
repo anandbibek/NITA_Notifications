@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.nita.notifications;
+package org.nita.notifications.gcm;
 
 import android.app.IntentService;
 import android.content.Intent;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.nita.notifications;
+package org.nita.notifications.gcm;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -27,6 +27,9 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
+
+import org.nita.notifications.MainActivity;
+import org.nita.notifications.R;
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -75,7 +78,7 @@ public class MyGcmListenerService extends GcmListenerService {
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_refresh_white_48dp)
-                .setContentTitle("GCM Message")
+                .setContentTitle("NITA Notifications")
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

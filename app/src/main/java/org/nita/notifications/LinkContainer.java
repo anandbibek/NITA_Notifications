@@ -1,9 +1,11 @@
 package org.nita.notifications;
 
+import java.io.Serializable;
+
 /**
  * Created by Anand on 24-Aug-15.
  */
-public class LinkContainer {
+public class LinkContainer implements Serializable{
     public String url, txt;
     boolean isHeader = false;
 

@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package org.nita.notifications;
+package org.nita.notifications.gcm;
 
 import android.content.Intent;
 
 import com.google.android.gms.iid.InstanceIDListenerService;
+
+import org.nita.notifications.gcm.RegistrationIntentService;
 
 public class MyInstanceIDListenerService extends InstanceIDListenerService {
 
