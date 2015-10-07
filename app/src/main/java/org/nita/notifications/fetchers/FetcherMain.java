@@ -16,6 +16,7 @@ public class FetcherMain {
     public ArrayList<LinkContainer> get(String url) throws IOException {
 
         ArrayList<LinkContainer> data = new ArrayList<>();
+        data.add(new LinkContainer("Latest News","NONE",true));
         Elements links = Jsoup.connect(url).timeout(20000).get().getElementById("vmarquee").select("a[href]");
         for (Element link : links) {
             data.add(new LinkContainer(link.text(), link.attr("abs:href")));

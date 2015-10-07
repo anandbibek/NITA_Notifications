@@ -48,7 +48,9 @@ public class CustomRecyclerAdapter extends RecyclerView.Adapter<CustomRecyclerAd
                 mText.setTextSize(16);
                 mText.setTextColor(Color.BLACK);
                 mainView.setBackgroundResource(0);
-                divider.setVisibility(View.VISIBLE);
+
+                //don't show divider in last item
+                divider.setVisibility((getLayoutPosition()<mLinks.size()-1)?View.VISIBLE : View.GONE);
             }
         }
 
