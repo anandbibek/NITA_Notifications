@@ -24,6 +24,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
@@ -78,7 +79,7 @@ public class MyGcmListenerService extends GcmListenerService {
         int num = message.split("\n").length;
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_refresh_white_48dp)
+                .setSmallIcon(R.drawable.ic_school_white_48dp)
                 .setContentTitle("NITA Notifications")
                 .setContentText( (num>1)? num +" new notices" : message )
                 .setAutoCancel(true)
@@ -86,10 +87,11 @@ public class MyGcmListenerService extends GcmListenerService {
                 .setContentIntent(pendingIntent);
 
         NotificationCompat.BigTextStyle style= new NotificationCompat.BigTextStyle();
-        style.setBigContentTitle("New notice details:");
+        style.setBigContentTitle("Notice details:");
         style.setSummaryText("NITA Notifications");
         style.bigText(message);
         notificationBuilder.setStyle(style);
+        notificationBuilder.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
