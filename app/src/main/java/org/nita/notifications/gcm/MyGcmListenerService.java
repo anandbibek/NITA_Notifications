@@ -75,18 +75,23 @@ public class MyGcmListenerService extends GcmListenerService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
+        int num = message.split("\n").length;
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_refresh_white_48dp)
                 .setContentTitle("NITA Notifications")
-                .setContentText(message)
+                .setContentText( (num>1)? num +" new notices" : message )
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.BigTextStyle style= new NotificationCompat.BigTextStyle();
+        style.setBigContentTitle("New notice details:");
+        style.setSummaryText("NITA Notifications");
+        style.bigText(message);
+        notificationBuilder.setStyle(style);
 
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 }
