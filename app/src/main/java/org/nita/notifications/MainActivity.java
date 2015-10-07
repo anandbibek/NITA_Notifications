@@ -2,12 +2,14 @@ package org.nita.notifications;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.nita.notifications.fragments.MainNoticeFragment;
 import org.nita.notifications.gcm.RegistrationIntentService;
@@ -36,10 +38,17 @@ public class MainActivity extends AppCompatActivity {
     private void initInstances() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         setupViewPager(viewPager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fabBtn);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setupViewPager(viewPager);
+            }
+        });
 
         //TODO handle registration gracefully
         Intent intent = new Intent(this, RegistrationIntentService.class);
@@ -52,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_latest), BASE_URL);
         adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_academic), ACADEMIC_URL);
         adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_events), EVENTS_URL);
-        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_upcoming), UPCOMING_URL);
+        //adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_upcoming), UPCOMING_URL);
         viewPager.setAdapter(adapter);
     }
 

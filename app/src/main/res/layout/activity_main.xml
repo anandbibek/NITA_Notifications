@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 app:tabMode="scrollable"
                 app:tabMinWidth="100dp"
+                style="@style/MyCustomTabLayout"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
         </android.support.design.widget.AppBarLayout>
@@ -46,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:src="@drawable/ic_refresh_white_48dp"
+            app:layout_behavior="org.nita.notifications.ScrollAwareFABBehavior"
             android:layout_marginBottom="@dimen/fab_margin_bottom"
             android:layout_marginRight="@dimen/fab_margin_right"/>
 
