@@ -15,3 +15,9 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keep class android.support.design.widget.** { *; }
+-keep interface android.support.design.widget.** { *; }
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.android.gms.**
+-dontwarn android.support.design.**
