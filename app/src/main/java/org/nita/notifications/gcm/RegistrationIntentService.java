@@ -33,7 +33,8 @@ public class RegistrationIntentService extends IntentService {
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
     private static final String TAG = "RegIntentService";
-    private static final String[] TOPICS = {"global"};
+    private static final String[] TOPICS = {"test"};
+    //private static final String[] TOPICS = {"release"};
 
     public RegistrationIntentService() {
         super(TAG);
@@ -54,8 +55,7 @@ public class RegistrationIntentService extends IntentService {
                 Log.i(TAG, "Asking GCM Registration Token: ");
                 InstanceID instanceID = InstanceID.getInstance(this);
                 //TODO secure sender id?
-                String token = instanceID.getToken("1008435488114",
-                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                String token = instanceID.getToken("1008435488114", GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
                 // [END get_token]
                 Log.i(TAG, "GCM Registration Token: " + token);
 
@@ -78,7 +78,7 @@ public class RegistrationIntentService extends IntentService {
             // on a third-party server, this ensures that we'll attempt the update at a later time.
             sharedPreferences.edit().putBoolean(SENT_TOKEN_TO_SERVER, false).apply();
         }
-        // Notify UI that registration has completed, so the progress indicator can be hidden.
+        // TODO Notify UI that registration has completed, so the progress indicator can be hidden.
         //Intent registrationComplete = new Intent(REGISTRATION_COMPLETE);
         //LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
     }
