@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String SAVE_KEY = "save_key";
 
     Toolbar toolbar;
+    View root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initInstances() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        root = findViewById(R.id.rootLayout);
         setSupportActionBar(toolbar);
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         setupViewPager(viewPager);
@@ -86,4 +88,14 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    //TODO Handle token refresh callback
+    /*class RegistrationListener extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            context.unregisterReceiver(this);
+            Snackbar.make(root,intent.getStringExtra("msg"),Snackbar.LENGTH_SHORT);
+        }
+    }*/
 }
