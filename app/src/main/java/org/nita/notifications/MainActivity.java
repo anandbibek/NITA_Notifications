@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -35,6 +36,19 @@ public class MainActivity extends AppCompatActivity {
         initInstances();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String msg = getIntent().getStringExtra("msg");
+        if(msg!=null && !msg.equals("")){
+            new AlertDialog.Builder(this)
+                    .setTitle("New Messages : ")
+                    .setMessage(msg)
+                    .setPositiveButton("Dismiss",null)
+                    .setCancelable(false)
+                    .show();
+        }
+    }
 
     private void initInstances() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
