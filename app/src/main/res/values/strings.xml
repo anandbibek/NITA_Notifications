@@ -7,5 +7,16 @@
     <string name="category_events">Events</string>
     <string name="category_upcoming">Upcoming</string>
     <string name="category_tag">CATEGORY</string>
-    <string name="action_about">About</string>
+    <string name="action_info">Information</string>
+    <string name="details">NIT Agartala News and Notification app</string>
+    <string name="desc_about">This application has been designed to facilitate staying up to date
+        with News and Events that are posted on NITA Website.
+        It\'s a work in progress and we plan to improve and add new features.
+        \n\nThe source code for this app is open sourced at https://github.com/anandbibek/NITA_Notifications .
+        \nAny feedback and contribution towards this project are most welcome.
+    </string>
+
+    <string name="desc_contributors">Suman Deb, Asst. Prof, CSE\nGuide and Coordinator
+        \n\nAnanda Bibek Ray, M.Tech, CSE (2015-17)\nLead developer
+    </string>
 </resources>
