@@ -3,6 +3,7 @@ package org.nita.notifications.fragments;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +36,7 @@ public class MainNoticeFragment extends Fragment {
     RecyclerView recyclerView;
     SwipeRefreshLayout refreshLayout;
     String category, req_url;
+    View v;
 
     public MainNoticeFragment(){}
 
@@ -67,6 +69,7 @@ public class MainNoticeFragment extends Fragment {
             new WebFetcher().execute(req_url);
         }
         setRetainInstance(true);
+        v = view;
         return view;
     }
 
@@ -97,6 +100,7 @@ public class MainNoticeFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
+            refreshLayout.measure(200,400);
             refreshLayout.setRefreshing(true);
         }
 
@@ -123,6 +127,8 @@ public class MainNoticeFragment extends Fragment {
         protected void onPostExecute(ArrayList<LinkContainer> linkContainers) {
             if(linkContainers!=null)
                 setAdapter(linkContainers, true);
+            else
+                Snackbar.make(v, "Could not load data. Check your internet connection.", Snackbar.LENGTH_LONG).show();
             refreshLayout.setRefreshing(false);
         }
     }
