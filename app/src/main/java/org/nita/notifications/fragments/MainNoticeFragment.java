@@ -22,7 +22,6 @@ import org.nita.notifications.fetchers.FetcherUpcoming;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -67,6 +66,7 @@ public class MainNoticeFragment extends Fragment {
             e.printStackTrace();
             new WebFetcher().execute(req_url);
         }
+        setRetainInstance(true);
         return view;
     }
 
@@ -112,7 +112,7 @@ public class MainNoticeFragment extends Fragment {
                 else if (category.equals(getString(R.string.category_upcoming)))
                     return new FetcherUpcoming().get(req_url);
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 //TODO show popup if no internet
                 e.printStackTrace();
             }
@@ -121,7 +121,8 @@ public class MainNoticeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(ArrayList<LinkContainer> linkContainers) {
-            setAdapter(linkContainers, true);
+            if(linkContainers!=null)
+                setAdapter(linkContainers, true);
             refreshLayout.setRefreshing(false);
         }
     }
