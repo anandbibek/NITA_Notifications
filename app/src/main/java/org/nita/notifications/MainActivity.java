@@ -14,6 +14,7 @@ import android.view.View;
 
 import org.nita.notifications.fragments.MainNoticeFragment;
 import org.nita.notifications.gcm.RegistrationIntentService;
+import org.nita.notifications.settings.SettingsActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this,SettingsActivity.class));
             return true;
         }
 

@@ -62,6 +62,13 @@ public class RegistrationIntentService extends IntentService {
                 // TODO: Implement this method to send any registration to your app's servers.
                 sendRegistrationToServer(token);
 
+
+                if(intent.getBooleanExtra("unsubscribe",false)){
+                    Log.d(TAG, "Unsubscribed");
+                    unSubscribeTopics(token);
+                    return;
+                }
+
                 // Subscribe to topic channels
                 subscribeTopics(token);
 
@@ -110,4 +117,10 @@ public class RegistrationIntentService extends IntentService {
     }
     // [END subscribe_topics]
 
+    private void unSubscribeTopics(String token) throws IOException {
+        for (String topic : TOPICS) {
+            GcmPubSub pubSub = GcmPubSub.getInstance(this);
+            pubSub.unsubscribe(token, "/topics/" + topic);
+        }
+    }
 }
