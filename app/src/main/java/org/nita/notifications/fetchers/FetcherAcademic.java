@@ -3,11 +3,10 @@ package org.nita.notifications.fetchers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.nita.notifications.LinkContainer;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-import org.nita.notifications.LinkContainer;
 
 /**
  * Created by Anand on 24-Aug-15.

@@ -16,10 +16,16 @@ public class FetcherMain {
     public ArrayList<LinkContainer> get(String url) throws IOException {
 
         ArrayList<LinkContainer> data = new ArrayList<>();
+
+        //add first Element, which is header
         data.add(new LinkContainer("Latest News","NONE",true));
-        Elements links = Jsoup.connect(url).timeout(20000).get().getElementById("vmarquee").select("a[href]");
+        Element content = Jsoup.connect(url).timeout(20000).get().getElementById("vmarquee");
+        //Elements links = content.select("a[href]");
+        Elements links = content.select("p");
+        //Log.d("DDDD",content.outerHtml()+"K");
         for (Element link : links) {
-            data.add(new LinkContainer(link.text(), link.attr("abs:href")));
+            //data.add(new LinkContainer(link.text(), link.attr("abs:href")));
+            data.add(new LinkContainer(link.text(), link.select("a[href]").attr("abs:href")));
         }
 
         return data;
