@@ -25,7 +25,9 @@ public class FetcherMain {
         //Log.d("DDDD",content.outerHtml()+"K");
         for (Element link : links) {
             //data.add(new LinkContainer(link.text(), link.attr("abs:href")));
-            data.add(new LinkContainer(link.text(), link.select("a[href]").attr("abs:href")));
+            String dat = link.select("a[href]").attr("abs:href");
+            if(dat!=null && !dat.equals(""))
+                data.add(new LinkContainer(link.text(), link.select("a[href]").attr("abs:href")));
         }
 
         return data;
