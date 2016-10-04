@@ -1,0 +1,18 @@
+#application: enginerun-1060
+application: nita-notifications
+version: 1
+runtime: php55
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: /
+  script: hello.php
+
+- url: /tasks/cron
+  script: main.php
+  login: admin

@@ -1,0 +1,5 @@
+cron:
+- description: NITA Website polling
+  url: /tasks/cron
+  schedule: every 2 hours from 07:00 to 22:00
+  timezone: Asia/Kolkata
