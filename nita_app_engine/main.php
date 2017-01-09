@@ -11,7 +11,8 @@ $msg = '';
 $change = false;
 $new_notices = [];
 $old_notices = [];
-$key1 = 'AIzaSyATpu6HrtBbz61wgxCzue9nxXtd_AQbNsk';
+$key1 = 'AIzaSyATpu6HrtBbz61wgxCzue9nxXtd_AQbNsk______';
+//$key1 = 'AIzaSyATpu6HrtBbz61wgxCzue9nxXtd_AQbNsk';
 $key_old = 'AIzaSyBWadID4BBABPNdBTAebYgIXZ_zQDmmyOo';
 
 
