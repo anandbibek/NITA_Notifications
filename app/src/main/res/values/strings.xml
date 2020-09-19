@@ -15,8 +15,8 @@
         \nAny feedback and contribution towards this project are most welcome.
     </string>
 
-    <string name="desc_contributors">Suman Deb, Asst. Prof, CSE\nGuide and Coordinator
-        \n\nAnanda Bibek Ray, M.Tech, CSE (2015-17)\nLead developer
+    <string name="desc_contributors">Ananda Bibek Ray, M.Tech, CSE (2015-17)\nLead developer
+        \n\nSuman Deb, Asst. Prof, CSE\nGuide and Coordinator
         \n\nOsman Gani, Dimitra Debnath, B.Tech, CSE (2013-17)\nTesting &amp; Feedback
     </string>
 
@@ -27,4 +27,8 @@
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="channel_name">New Notices or Events</string>
+    <string name="channel_description">Push notifications on new updates posted on NITA Website</string>
+    <string name="channel_id">website001</string>
+    <string name="channel_id_2">website002</string>
 </resources>

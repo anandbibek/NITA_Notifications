@@ -16,6 +16,7 @@
 
 package org.nita.notifications.gcm;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -45,6 +46,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage message) {
         String from = message.getFrom();
+        Log.d(TAG, "Data: " + message);
         Map<String, String> data = message.getData();
         String payload = data.get("message");
         Log.d(TAG, "From: " + from);
@@ -89,16 +91,22 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 PendingIntent.FLAG_ONE_SHOT);
 
         int num = message.split("\n").length;
+        String channel = message.contains("No new notice") ? getString(R.string.channel_id_2) : getString(R.string.channel_id);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "Website Updates")
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channel)
                 .setSmallIcon(R.drawable.ic_school_white_48dp)
                 .setContentTitle("NITA Notifications")
                 .setContentText((num > 1) ? num + " new notices" : message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent);
 
-        NotificationCompat.BigTextStyle style= new NotificationCompat.BigTextStyle();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            notificationBuilder.setCategory(Notification.CATEGORY_RECOMMENDATION);
+        }
+
+        NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
         style.setBigContentTitle("Notice details:");
         style.setSummaryText("NITA Notifications");
         style.bigText(message);
