@@ -23,52 +23,58 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GcmListenerService;
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 
 import org.nita.notifications.MainActivity;
 import org.nita.notifications.R;
 
-public class MyGcmListenerService extends GcmListenerService {
+import java.util.Map;
 
-    private static final String TAG = "MyGcmListenerService";
+public class MyFcmListenerService extends FirebaseMessagingService {
 
-    /**
-     * Called when message is received.
-     *
-     * @param from SenderID of the sender.
-     * @param data Data bundle containing message data as key/value pairs.
-     *             For Set of keys use data.keySet().
-     */
-    // [START receive_message]
+    private static final String TAG = MyFcmListenerService.class.getName();
+
     @Override
-    public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
+    public void onMessageReceived(RemoteMessage message) {
+        String from = message.getFrom();
+        Map<String, String> data = message.getData();
+        String payload = data.get("message");
         Log.d(TAG, "From: " + from);
-        Log.d(TAG, "Message: " + message);
+        Log.d(TAG, "Message: " + payload);
 
-        /**
+        /*
          * Production applications would usually process the message here.
          * Eg: - Syncing with server.
          *     - Store message in local database.
          *     - Update UI.
-         */
-
-        /**
+         *
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean show = sharedPreferences.getBoolean("notifications_new_message",true);
-        if(show)
-            sendNotification(message);
+        boolean show = sharedPreferences.getBoolean("notifications_new_message", true);
+        if (show)
+            sendNotification(payload);
     }
     // [END receive_message]
+
+
+    @Override
+    public void onNewToken(@NonNull String token) {
+        Log.d(TAG, "New token: " + token);
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        intent.putExtra("TOKEN", token);
+        startService(intent);
+    }
 
     /**
      * Create and show a simple notification containing the received GCM message.
@@ -83,11 +89,11 @@ public class MyGcmListenerService extends GcmListenerService {
                 PendingIntent.FLAG_ONE_SHOT);
 
         int num = message.split("\n").length;
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "Website Updates")
                 .setSmallIcon(R.drawable.ic_school_white_48dp)
                 .setContentTitle("NITA Notifications")
-                .setContentText( (num>1)? num +" new notices" : message )
+                .setContentText((num > 1) ? num + " new notices" : message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

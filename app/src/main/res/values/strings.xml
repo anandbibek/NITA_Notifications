@@ -11,7 +11,6 @@
     <string name="details">NIT Agartala News and Notification app</string>
     <string name="desc_about">This application has been designed to facilitate staying up to date
         with News and Events that are posted on NITA Website.
-        It\'s a work in progress and we plan to improve and add new features.
         \n\nThe source code for this app is open sourced at https://github.com/anandbibek/NITA_Notifications .
         \nAny feedback and contribution towards this project are most welcome.
     </string>

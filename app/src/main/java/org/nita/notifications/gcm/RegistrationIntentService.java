@@ -22,19 +22,19 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GcmPubSub;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import java.io.IOException;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.Arrays;
 
 public class RegistrationIntentService extends IntentService {
 
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
-    private static final String TAG = "RegIntentService";
-    private static final String[] TOPICS = {"test"};
-    //private static final String[] TOPICS = {"release"};
+    private static final String TAG = RegistrationIntentService.class.getName();
+    //private static final String[] TOPICS = {"test"};
+    private static final String[] TOPICS = {"release"};
 
     public RegistrationIntentService() {
         super(TAG);
@@ -48,29 +48,21 @@ public class RegistrationIntentService extends IntentService {
             // In the (unlikely) event that multiple refresh operations occur simultaneously,
             // ensure that they are processed sequentially.
             synchronized (TAG) {
-                // [START register_for_gcm]
-                // Initially this call goes out to the network to retrieve the token, subsequent calls
-                // are local.
-                // [START get_token]
-                Log.i(TAG, "Asking GCM Registration Token: ");
-                InstanceID instanceID = InstanceID.getInstance(this);
-                //TODO secure sender id?
-                String token = instanceID.getToken("1008435488114", GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-                // [END get_token]
-                Log.i(TAG, "GCM Registration Token: " + token);
+                String token = intent.getStringExtra("TOKEN");
+                Log.i(TAG, "FCM Registration Token: " + token);
 
-                // TODO: Implement this method to send any registration to your app's servers.
-                sendRegistrationToServer(token);
+                // Implement this method to send any registration to your app's servers.
+                sendRegistrationToServer();
 
-
-                if(intent.getBooleanExtra("unsubscribe",false)){
-                    Log.d(TAG, "Unsubscribed");
-                    unSubscribeTopics(token);
+                if (intent.getBooleanExtra("unsubscribe", false)) {
+                    Log.d(TAG, "Un-subscribing...");
+                    unSubscribeTopics();
                     return;
                 }
 
                 // Subscribe to topic channels
-                subscribeTopics(token);
+                Log.d(TAG, "Subscribing...");
+                subscribeTopics();
 
                 // You should store a boolean that indicates whether the generated token has been
                 // sent to your server. If the boolean is false, send the token to your server,
@@ -83,44 +75,39 @@ public class RegistrationIntentService extends IntentService {
             Log.d(TAG, "Failed to complete token refresh", e);
             // If an exception happens while fetching the new token or updating our registration data
             // on a third-party server, this ensures that we'll attempt the update at a later time.
-            sharedPreferences.edit().putBoolean(SENT_TOKEN_TO_SERVER, false).apply();
+            // sharedPreferences.edit().putBoolean(SENT_TOKEN_TO_SERVER, false).apply();
         }
-        // TODO Notify UI that registration has completed, so the progress indicator can be hidden.
-        //Intent registrationComplete = new Intent(REGISTRATION_COMPLETE);
-        //LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+        // Notify UI that registration has completed, so the progress indicator can be hidden.
+        Intent registrationComplete = new Intent(REGISTRATION_COMPLETE);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
     }
 
     /**
      * Persist registration to third-party servers.
-     *
+     * <p>
      * Modify this method to associate the user's GCM registration token with any server-side account
      * maintained by your application.
-     *
-     * @param token The new token.
      */
-    private void sendRegistrationToServer(String token) {
+    private void sendRegistrationToServer() {
         // Add custom implementation, as needed.
     }
 
     /**
-     * Subscribe to any GCM topics of interest, as defined by the TOPICS constant.
-     *
-     * @param token GCM token
-     * @throws IOException if unable to reach the GCM PubSub service
+     * Subscribe to any FCM topics of interest, as defined by the TOPICS constant.
      */
-    // [START subscribe_topics]
-    private void subscribeTopics(String token) throws IOException {
+    private void subscribeTopics() {
         for (String topic : TOPICS) {
-            GcmPubSub pubSub = GcmPubSub.getInstance(this);
-            pubSub.subscribe(token, "/topics/" + topic, null);
+            FirebaseMessaging pubSub = FirebaseMessaging.getInstance();
+            pubSub.subscribeToTopic(topic);
         }
+        Log.i(TAG, "Subscribed to topics " + Arrays.toString(TOPICS));
     }
-    // [END subscribe_topics]
 
-    private void unSubscribeTopics(String token) throws IOException {
+    private void unSubscribeTopics() {
         for (String topic : TOPICS) {
-            GcmPubSub pubSub = GcmPubSub.getInstance(this);
-            pubSub.unsubscribe(token, "/topics/" + topic);
+            FirebaseMessaging pubSub = FirebaseMessaging.getInstance();
+            pubSub.unsubscribeFromTopic(topic);
         }
+        Log.i(TAG, "Unsubscribed from topics " + Arrays.toString(TOPICS));
     }
 }

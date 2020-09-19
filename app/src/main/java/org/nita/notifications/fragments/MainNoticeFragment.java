@@ -3,14 +3,16 @@ package org.nita.notifications.fragments;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.nita.notifications.CustomRecyclerAdapter;
 import org.nita.notifications.LinkContainer;
@@ -26,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by Anand on 24-Aug-15.
@@ -117,7 +120,7 @@ public class MainNoticeFragment extends Fragment {
                     return new FetcherUpcoming().get(req_url);
 
             } catch (Exception e) {
-                //TODO show popup if no internet
+                Snackbar.make(v, "Could not load data. " + e.getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
                 e.printStackTrace();
             }
             return null;
@@ -127,15 +130,13 @@ public class MainNoticeFragment extends Fragment {
         protected void onPostExecute(ArrayList<LinkContainer> linkContainers) {
             if(linkContainers!=null)
                 setAdapter(linkContainers, true);
-            else
-                Snackbar.make(v, "Could not load data. Check your internet connection.", Snackbar.LENGTH_LONG).show();
             refreshLayout.setRefreshing(false);
         }
     }
 
     private void setAdapter(ArrayList<LinkContainer> linkContainers, boolean write){
         if(linkContainers!=null) {
-            adapter = new CustomRecyclerAdapter(getActivity().getBaseContext(), linkContainers);
+            adapter = new CustomRecyclerAdapter(Objects.requireNonNull(getActivity()).getBaseContext(), linkContainers);
             recyclerView.setAdapter(adapter);
 
             //store web copy to local file for next run

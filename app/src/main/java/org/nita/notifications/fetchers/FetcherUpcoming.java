@@ -3,11 +3,10 @@ package org.nita.notifications.fetchers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.nita.notifications.LinkContainer;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-import org.nita.notifications.LinkContainer;
 
 /**
  * Created by Anand on 24-Aug-15.
@@ -22,11 +21,15 @@ public class FetcherUpcoming {
             //data.add(new LinkContainer(box.select("div[tabindex=0]").text(), "NONE", true));
             Elements lines = box.select("div[class=CollapsiblePanelTab],div[class=CollapsiblePanelContent]");
             for (Element line : lines) {
-                if(line.attr("tabindex")!=null && line.attr("tabindex").equals("0"))
-                    data.add(new LinkContainer(line.text(), "NONE", true));
+
+                final String text = line.text();
+                final Element firstLink = line.select("a[href]").first();
+                String urlAddress = firstLink == null ? "" : firstLink.attr("abs:href");
+
+                if (line.attr("tabindex") != null && line.attr("tabindex").equals("0"))
+                    data.add(new LinkContainer(text, urlAddress, true));
                 else
-                    //FIXME possible NPE here
-                    data.add(new LinkContainer(line.text(), line.select("a[href]").first().attr("abs:href")));
+                    data.add(new LinkContainer(text, urlAddress));
             }
         }
 

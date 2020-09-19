@@ -3,18 +3,12 @@
     package="org.nita.notifications" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- [START gcm_permission] -->
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="org.nita.notifications.permission.C2D_MESSAGE" />
-
-    <permission
-        android:name="org.nita.notifications.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- [END gcm_permission] -->
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
@@ -28,38 +22,17 @@
             </intent-filter>
         </activity>
 
-        <!-- [START gcm_receiver] -->
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="gcm.play.android.samples.com.gcmquickstart" />
-            </intent-filter>
-        </receiver>
-        <!-- [END gcm_receiver] -->
-
 
         <!-- [START gcm_listener] -->
         <service
-            android:name=".gcm.MyGcmListenerService"
+            android:name=".gcm.MyFcmListenerService"
             android:exported="false" >
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <!-- [END gcm_listener] -->
-        <!-- [START instanceId_listener] -->
-        <service
-            android:name=".gcm.MyInstanceIDListenerService"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
-            </intent-filter>
-        </service>
-        <!-- [END instanceId_listener] -->
+
         <service
             android:name=".gcm.RegistrationIntentService"
             android:exported="false" >
@@ -72,7 +45,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
->
         </activity>
         <activity
             android:name=".settings.SettingsActivity"

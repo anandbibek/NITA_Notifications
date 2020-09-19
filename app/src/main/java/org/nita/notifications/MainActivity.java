@@ -1,28 +1,36 @@
 package org.nita.notifications;
 
+import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
+import com.karumi.dexter.listener.single.PermissionListener;
+
 import org.nita.notifications.fragments.MainNoticeFragment;
-import org.nita.notifications.gcm.RegistrationIntentService;
 import org.nita.notifications.settings.SettingsActivity;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String BASE_URL = "http://www.nita.ac.in";
-    public static final String ACADEMIC_URL = "http://www.nita.ac.in/NITAmain/academics/academicsNotice.html";
-    public static final String EVENTS_URL = "http://www.nita.ac.in/NITAmain/news--events/newseventshome.html";
-    public static final String UPCOMING_URL = "http://www.nita.ac.in/NITAmain/news--events/events.html";
+    public static final String BASE_URL = "https://www.nita.ac.in";
+    public static final String ACADEMIC_URL = "https://www.nita.ac.in/NITAmain/academics/academicsNotice.html";
+    public static final String EVENTS_URL = "https://www.nita.ac.in/NITAmain/news--events/newseventshome.html";
+    public static final String UPCOMING_URL = "https://www.nita.ac.in/NITAmain/news--events/events.html";
     public static final String CATEGORY_TAG = "CAT_TAG";
     public static final String URL_TAG = "URL_TAG";
     public static final String SAVE_KEY = "save_key";
@@ -35,6 +43,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initInstances();
+
+        PermissionListener dialogPermissionListener =
+                DialogOnDeniedPermissionListener.Builder
+                        .withContext(this)
+                        .withTitle("Storage permission")
+                        .withMessage("Storage permission (optional) is required to cache notice data for offline usage.")
+                        .withButtonText(android.R.string.ok)
+                        .withIcon(R.mipmap.ic_launcher)
+                        .build();
+        Dexter.withContext(this)
+                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(dialogPermissionListener)
+                .check();
     }
 
     @Override
@@ -59,17 +80,12 @@ public class MainActivity extends AppCompatActivity {
         setupViewPager(viewPager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
-        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fabBtn);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setupViewPager(viewPager);
-            }
-        });
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabBtn);
+        fab.setOnClickListener(v -> setupViewPager(viewPager));
 
-        //TODO handle registration gracefully
-        Intent intent = new Intent(this, RegistrationIntentService.class);
-        startService(intent);
+        // manual invocation not required in FCM
+        /*Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);*/
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -78,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_latest), BASE_URL);
         adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_academic), ACADEMIC_URL);
         adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_events), EVENTS_URL);
-        //adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_upcoming), UPCOMING_URL);
+        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_upcoming), UPCOMING_URL);
         viewPager.setAdapter(adapter);
     }
 
@@ -102,21 +118,21 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        if(id == R.id.action_about){
-            startActivity(new Intent(this,AboutActivity.class));
+        if (id == R.id.action_about) {
+            startActivity(new Intent(this, AboutActivity.class));
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    //TODO Handle token refresh callback
-    /*class RegistrationListener extends BroadcastReceiver{
+    // Handle token refresh callback
+    class RegistrationListener extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             context.unregisterReceiver(this);
-            Snackbar.make(root,intent.getStringExtra("msg"),Snackbar.LENGTH_SHORT);
+            Snackbar.make(root, "Subscribed to NITA push notifications", Snackbar.LENGTH_SHORT);
         }
-    }*/
+    }
 }

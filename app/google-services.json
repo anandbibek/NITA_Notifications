@@ -1,1 +1,40 @@
-{"project_info":{"project_id":"nita-notifications","project_number":"1008435488114","name":"NITA-Notifications"},"client":[{"client_info":{"mobilesdk_app_id":"1:1008435488114:android:b243cea00ff36c28","client_id":"android:org.nita.notifications","client_type":1,"android_client_info":{"package_name":"org.nita.notifications"}},"oauth_client":[],"api_key":[],"services":{"analytics_service":{"status":2,"analytics_property":{"tracking_id":"UA-68595644-1"}},"cloud_messaging_service":{"status":2,"apns_config":[]},"appinvite_service":{"status":1,"other_platform_oauth_client":[]},"google_signin_service":{"status":1},"ads_service":{"status":1}}}],"client_info":[],"ARTIFACT_VERSION":"1"}
+{
+  "project_info": {
+    "project_number": "1008435488114",
+    "firebase_url": "https://nita-notifications.firebaseio.com",
+    "project_id": "nita-notifications",
+    "storage_bucket": "nita-notifications.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008435488114:android:b243cea00ff36c28",
+        "android_client_info": {
+          "package_name": "org.nita.notifications"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008435488114-fgmhlrj2vqnhki7tfiqdfbsppvoeeg0r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtqCV0gTCfZDAnpLVG7i477mKuCrEgV0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008435488114-fgmhlrj2vqnhki7tfiqdfbsppvoeeg0r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

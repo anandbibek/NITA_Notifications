@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -59,6 +61,10 @@ public class CustomRecyclerAdapter extends RecyclerView.Adapter<CustomRecyclerAd
             //String link = Uri.encode(mLinks.get(getLayoutPosition()).url);
             String link = mLinks.get(getLayoutPosition()).url;
             Log.d("URL", link);
+
+            if (link.isEmpty())
+                return;
+
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
             v.getContext().startActivity(browserIntent);
         }
@@ -69,8 +75,9 @@ public class CustomRecyclerAdapter extends RecyclerView.Adapter<CustomRecyclerAd
         return mLinks.size();
     }
 
+    @NonNull
     @Override
-    public CustomAppViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CustomAppViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = mInflater.inflate(R.layout.list_item, parent, false);
         return new CustomAppViewHolder(v);
     }

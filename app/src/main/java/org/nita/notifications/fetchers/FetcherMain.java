@@ -18,7 +18,7 @@ public class FetcherMain {
         ArrayList<LinkContainer> data = new ArrayList<>();
 
         //add first Element, which is header
-        data.add(new LinkContainer("Latest News","NONE",true));
+        data.add(new LinkContainer("Latest News", "", true));
         Element content = Jsoup.connect(url).timeout(20000).get().getElementById("vmarquee");
         //Elements links = content.select("a[href]");
         Elements links = content.select("p");
