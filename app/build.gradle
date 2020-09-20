@@ -28,6 +28,14 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
     }
+    signingConfigs {
+        defconfig {
+            keyAlias 'releasekey'
+            keyPassword 'android@123'
+            storeFile file('C:/Users/Anand/.android/release.keystore')
+            storePassword 'android@123'
+        }
+    }
 }
 
 dependencies {

@@ -44,10 +44,11 @@
             android:id="@+id/fabBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="bottom|end"
             android:src="@drawable/ic_refresh_white_48dp"
             app:layout_behavior="org.nita.notifications.ScrollAwareFABBehavior"
             android:layout_marginBottom="@dimen/fab_margin_bottom"
+            android:layout_marginEnd="@dimen/fab_margin_right"
             android:layout_marginRight="@dimen/fab_margin_right" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

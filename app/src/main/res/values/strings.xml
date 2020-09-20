@@ -11,8 +11,9 @@
     <string name="details">NIT Agartala News and Notification app</string>
     <string name="desc_about">This application has been designed to facilitate staying up to date
         with News and Events that are posted on NITA Website.
-        \n\nThe source code for this app is open sourced at https://github.com/anandbibek/NITA_Notifications .
-        \nAny feedback and contribution towards this project are most welcome.
+        \n\nThe source code for this app is open sourced at https://github.com/anandbibek/NITA_Notifications.
+        Repo is currently private to reduce security risks. Please reach out to me if you are interested in being a part.
+        \nAny feedback and contribution is most welcome.
     </string>
 
     <string name="desc_contributors">Ananda Bibek Ray, M.Tech, CSE (2015-17)\nLead developer
@@ -31,4 +32,7 @@
     <string name="channel_description">Push notifications on new updates posted on NITA Website</string>
     <string name="channel_id">website001</string>
     <string name="channel_id_2">website002</string>
+    <string name="nita_entrance">NITA Entrance</string>
+    <string name="about_the_app">About the app</string>
+    <string name="contributors">Contributors</string>
 </resources>
