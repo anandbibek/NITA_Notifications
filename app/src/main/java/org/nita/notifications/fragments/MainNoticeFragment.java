@@ -45,15 +45,17 @@ public class MainNoticeFragment extends Fragment {
 
     @Override
     public void setArguments(Bundle args) {
-        category = args.getString(MainActivity.CATEGORY_TAG);
-        req_url = args.getString(MainActivity.URL_TAG);
+        if(args != null) {
+            category = args.getString(MainActivity.CATEGORY_TAG);
+            req_url = args.getString(MainActivity.URL_TAG);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_fragment, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.listfrag_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity().getBaseContext()));
         recyclerView.setHasFixedSize(true);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -65,7 +67,7 @@ public class MainNoticeFragment extends Fragment {
 
         try {
             //show from saved file initially
-            new FileRetriever().execute(getActivity().openFileInput(category));
+            new FileRetriever().execute(requireActivity().openFileInput(category));
         }catch (Exception e){
             //fall back to web if file read fails
             e.printStackTrace();
@@ -136,13 +138,13 @@ public class MainNoticeFragment extends Fragment {
 
     private void setAdapter(ArrayList<LinkContainer> linkContainers, boolean write){
         if(linkContainers!=null) {
-            adapter = new CustomRecyclerAdapter(Objects.requireNonNull(getActivity()).getBaseContext(), linkContainers);
+            adapter = new CustomRecyclerAdapter(requireActivity().getBaseContext(), linkContainers);
             recyclerView.setAdapter(adapter);
 
             //store web copy to local file for next run
             if(write) {
                 try {
-                    FileOutputStream fos = getActivity().openFileOutput(category,Context.MODE_PRIVATE);
+                    FileOutputStream fos = requireActivity().openFileOutput(category,Context.MODE_PRIVATE);
                     ObjectOutputStream os = new ObjectOutputStream(fos);
                     os.writeObject(linkContainers);
                     os.close();
