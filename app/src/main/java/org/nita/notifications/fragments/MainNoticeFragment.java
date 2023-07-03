@@ -18,17 +18,18 @@ import org.nita.notifications.CustomRecyclerAdapter;
 import org.nita.notifications.LinkContainer;
 import org.nita.notifications.MainActivity;
 import org.nita.notifications.R;
-import org.nita.notifications.fetchers.FetcherAcademic;
-import org.nita.notifications.fetchers.FetcherEvents;
-import org.nita.notifications.fetchers.FetcherMain;
-import org.nita.notifications.fetchers.FetcherUpcoming;
+import org.nita.notifications.fetchers.FetcherAllNotice;
+import org.nita.notifications.fetchers.FetcherNewsEvents;
+import org.nita.notifications.fetchers.FetcherHome;
+import org.nita.notifications.fetchers.FetcherOrderCirculars;
+import org.nita.notifications.fetchers.FetcherStudentNotifications;
+import org.nita.notifications.fetchers.FetcherDownloadCorner;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Created by Anand on 24-Aug-15.
@@ -113,13 +114,17 @@ public class MainNoticeFragment extends Fragment {
         protected ArrayList<LinkContainer> doInBackground(String... params) {
             try {
                 if(category.equals(getString(R.string.category_latest)))
-                    return new FetcherMain().get(req_url);
-                else if (category.equals(getString(R.string.category_academic)))
-                    return new FetcherAcademic().get(req_url);
+                    return new FetcherHome().get(req_url);
+                else if (category.equals(getString(R.string.category_notice)))
+                    return new FetcherAllNotice().get(req_url);
                 else if (category.equals(getString(R.string.category_events)))
-                    return new FetcherEvents().get(req_url);
-                else if (category.equals(getString(R.string.category_upcoming)))
-                    return new FetcherUpcoming().get(req_url);
+                    return new FetcherNewsEvents().get(req_url);
+                else if (category.equals(getString(R.string.category_students)))
+                    return new FetcherStudentNotifications().get(req_url);
+                else if (category.equals(getString(R.string.category_download)))
+                    return new FetcherDownloadCorner().get(req_url);
+                else if (category.equals(getString(R.string.category_order)))
+                    return new FetcherOrderCirculars().get(req_url);
 
             } catch (Exception e) {
                 Snackbar.make(v, "Could not load data. " + e.getLocalizedMessage(), Snackbar.LENGTH_LONG).show();

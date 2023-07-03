@@ -1,65 +1,64 @@
 package org.nita.notifications;
 
 import android.Manifest;
+import android.Manifest.permission;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.karumi.dexter.Dexter;
-import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
+import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener.Builder;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import com.permissionx.guolindev.PermissionMediator;
+import com.permissionx.guolindev.PermissionX;
+import java.util.Collections;
 import org.nita.notifications.fragments.MainNoticeFragment;
-import org.nita.notifications.settings.SettingsActivity;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String BASE_URL = "https://www.nita.ac.in";
-    public static final String ACADEMIC_URL = "https://www.nita.ac.in/NITAmain/academics/academicsNotice.html";
-    public static final String EVENTS_URL = "https://www.nita.ac.in/NITAmain/news--events/newseventshome.html";
-    public static final String UPCOMING_URL = "https://www.nita.ac.in/NITAmain/news--events/events.html";
+    public static final String HOME_URL = "https://nita.ac.in/UserPanel/Default.aspx";
+    public static final String NOTICE_URL = "https://nita.ac.in/UserPanel/ViewAllNewsAndEvents.aspx?nModuleID=gi";
+    public static final String EVENTS_URL = "https://nita.ac.in/UserPanel/ViewAllNewsAndEvents.aspx?nModuleID=ea";
+    public static final String STUDENTS_URL = "https://nita.ac.in/UserPanel/StudentNotification.aspx";
+    public static final String DOWNLOAD_CORNER_URL = "https://nita.ac.in/UserPanel/DownloadCorner.aspx";
+    public static final String ORDER_URL = "https://nita.ac.in/UserPanel/Minutes_Others.aspx?file=Order_Circulars";
     public static final String CATEGORY_TAG = "CAT_TAG";
     public static final String URL_TAG = "URL_TAG";
     public static final String SAVE_KEY = "save_key";
 
     Toolbar toolbar;
     View root;
+    PermissionMediator permissionMediator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        permissionMediator = PermissionX.init(this);
         initInstances();
         createNotificationChannel();
-
-        PermissionListener dialogPermissionListener =
-                DialogOnDeniedPermissionListener.Builder
-                        .withContext(this)
-                        .withTitle("Storage permission")
-                        .withMessage("Storage permission (optional) is required to cache notice data for offline usage.")
-                        .withButtonText(android.R.string.ok)
-                        .withIcon(R.mipmap.ic_launcher)
-                        .build();
-        Dexter.withContext(this)
-                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(dialogPermissionListener)
-                .check();
     }
 
     @Override
@@ -93,6 +92,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createNotificationChannel() {
+        if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+            permissionMediator.permissions(permission.POST_NOTIFICATIONS)
+                .explainReasonBeforeRequest()
+                .onExplainRequestReason((scope, deniedList) -> {
+                    scope.showRequestReasonDialog(Collections.singletonList(permission.POST_NOTIFICATIONS),
+                        "Required for sending push notifications on website updates.", "OK",
+                        "Cancel");
+                }).request((allGranted, grantedList, deniedList) -> {
+                    if (!allGranted) {
+                        Toast.makeText(this, "Notification permission denied", Toast.LENGTH_LONG).show();
+                    }
+                });
+        }
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -115,10 +127,14 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         viewPager.setOffscreenPageLimit(3);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_latest), BASE_URL);
-        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_academic), ACADEMIC_URL);
+        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_latest), HOME_URL);
+        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_notice), NOTICE_URL);
         adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_events), EVENTS_URL);
-        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_upcoming), UPCOMING_URL);
+        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_students),
+            STUDENTS_URL);
+        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_download),
+            DOWNLOAD_CORNER_URL);
+        adapter.addFrag(new MainNoticeFragment(), getString(R.string.category_order),ORDER_URL);
         viewPager.setAdapter(adapter);
     }
 
@@ -156,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             context.unregisterReceiver(this);
-            Snackbar.make(root, "Subscribed to NITA push notifications", Snackbar.LENGTH_SHORT);
+            Snackbar.make(root, "Subscribed to NITA push notifications", Snackbar.LENGTH_SHORT).show();
         }
     }
 }

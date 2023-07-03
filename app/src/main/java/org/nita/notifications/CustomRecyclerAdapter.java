@@ -66,6 +66,7 @@ public class CustomRecyclerAdapter extends RecyclerView.Adapter<CustomRecyclerAd
                 return;
 
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+            browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             v.getContext().startActivity(browserIntent);
         }
     }

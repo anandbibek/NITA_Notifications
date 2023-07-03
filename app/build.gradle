@@ -62,4 +62,7 @@ dependencies {
     // 3rd party
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'com.karumi:dexter:6.2.1'
+    implementation 'com.guolindev.permissionx:permissionx:1.7.1'
+
+
 }

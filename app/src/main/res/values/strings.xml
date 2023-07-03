@@ -2,10 +2,12 @@
     <string name="app_name">NITA Notifications</string>
 
     <string name="action_settings">Settings</string>
-    <string name="category_latest">Main</string>
-    <string name="category_academic">Academic</string>
-    <string name="category_events">Events</string>
-    <string name="category_upcoming">Upcoming</string>
+    <string name="category_latest">Home</string>
+    <string name="category_notice">All Notices</string>
+    <string name="category_students">Student Notifications</string>
+    <string name="category_events">News &amp; Events</string>
+    <string name="category_download">Download Corner</string>
+    <string name="category_order">Order &amp; Circulars</string>
     <string name="category_tag">CATEGORY</string>
     <string name="action_info">Information</string>
     <string name="details">NIT Agartala News and Notification app</string>
@@ -13,7 +15,7 @@
         with News and Events that are posted on NITA Website.
         \n\nThe source code for this app is open sourced at https://github.com/anandbibek/NITA_Notifications.
         Repo is currently private to reduce security risks. Please reach out to me if you are interested in being a part.
-        \nAny feedback and contribution is most welcome.
+        \n\nAny feedback and contribution is most welcome.
     </string>
 
     <string name="desc_contributors">Ananda Bibek Ray, M.Tech, CSE (2015-17)\nLead developer
