@@ -1,7 +1,10 @@
 package org.nita.notifications;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -43,5 +46,12 @@ public class AboutActivity extends AppCompatActivity {
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
         collapsingToolbarLayout.setTitle(getString(R.string.action_info));
+
+        Button b = findViewById(R.id.openWebsite);
+        b.setOnClickListener(v -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://nita.ac.in/"));
+            browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            v.getContext().startActivity(browserIntent);
+        });
     }
 }

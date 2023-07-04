@@ -28,7 +28,7 @@ public class FetcherHome {
                 data.add(new LinkContainer(link.text(), dat));
         }
 
-        data.add(new LinkContainer("Latest News", "", true));
+        data.add(new LinkContainer("Latest Events", "", true));
         Elements newsContent = document.getElementsByClass("news_card").select("div.details");
         for (Element link : newsContent) {
             String newsUrl = link.selectFirst("a[href]").attr("abs:href");

@@ -12,15 +12,19 @@
     <string name="action_info">Information</string>
     <string name="details">NIT Agartala News and Notification app</string>
     <string name="desc_about">This application has been designed to facilitate staying up to date
-        with News and Events that are posted on NITA Website.
-        \n\nThe source code for this app is open sourced at https://github.com/anandbibek/NITA_Notifications.
-        Repo is currently private to reduce security risks. Please reach out to me if you are interested in being a part.
-        \n\nAny feedback and contribution is most welcome.
+        with Notices that are posted on NIT Agartala Website.
+        \n\nAll notices are fetched from the NIT Agartala official website - https://nita.ac.in/ .
+        This app does not generate content on its own. Please visit the referred website above
+        for details on contact and notice sources.
     </string>
 
     <string name="desc_contributors">Ananda Bibek Ray, M.Tech, CSE (2015-17)\nLead developer
         \n\nSuman Deb, Asst. Prof, CSE\nGuide and Coordinator
         \n\nOsman Gani, Dimitra Debnath, B.Tech, CSE (2013-17)\nTesting &amp; Feedback
+        \n\n\nThe source code for this app is open sourced at
+        https://github.com/anandbibek/NITA_Notifications.
+        Repo is currently private to reduce security risks. Please reach out to me if you are interested in being a part.
+        \n\nAny feedback and contribution is most welcome.
     </string>
 
     <!-- Example settings for Notifications -->
@@ -37,4 +41,5 @@
     <string name="nita_entrance">NITA Entrance</string>
     <string name="about_the_app">About the app</string>
     <string name="contributors">Contributors</string>
+    <string name="visit_website">Visit Website</string>
 </resources>

@@ -79,6 +79,16 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <Button
+                  android:id="@+id/openWebsite"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/visit_website"
+                  android:layout_margin="24dp"
+                  android:background="@color/colorPrimary"
+                  android:textColor="#fff"
+                  android:padding="24dp"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

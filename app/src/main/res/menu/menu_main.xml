@@ -13,5 +13,5 @@
         android:title="@string/action_info"
         android:orderInCategory="101"
         android:icon="@drawable/ic_round_info_24"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always|withText" />
 </menu>
