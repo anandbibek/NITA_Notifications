@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     View root;
     PermissionMediator permissionMediator;
+    String SHOW_DISCLAIMER = "SHOW_DISCLAIMER";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,22 @@ public class MainActivity extends AppCompatActivity {
         permissionMediator = PermissionX.init(this);
         initInstances();
         createNotificationChannel();
+
+        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(SHOW_DISCLAIMER, true)) {
+            new Builder(this).setTitle("Google Play Policy Disclaimer")
+                .setMessage(
+                    "The app does not represent a Govt. entity, and it is not affiliated to "
+                        + "NIT Agartala or any other govt entity.")
+                .setPositiveButton("OK", null)
+                .setNegativeButton("Do not show again", new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        PreferenceManager.getDefaultSharedPreferences(MainActivity.this)
+                            .edit().putBoolean(SHOW_DISCLAIMER, false).apply();
+                    }
+                })
+                .show();
+        }
     }
 
     @Override
