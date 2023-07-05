@@ -1,13 +1,13 @@
 package org.nita.notifications;
 
-import android.Manifest;
 import android.Manifest.permission;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
@@ -15,21 +15,22 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog.Builder;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener.Builder;
-import com.karumi.dexter.listener.single.PermissionListener;
-
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.appcheck.AppCheckProviderFactory;
+import com.google.firebase.appcheck.FirebaseAppCheck;
+import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory;
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory;
 import com.permissionx.guolindev.PermissionMediator;
 import com.permissionx.guolindev.PermissionX;
 import java.util.Collections;
@@ -46,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String ORDER_URL = "https://nita.ac.in/UserPanel/Minutes_Others.aspx?file=Order_Circulars";
     public static final String CATEGORY_TAG = "CAT_TAG";
     public static final String URL_TAG = "URL_TAG";
-    public static final String SAVE_KEY = "save_key";
 
     Toolbar toolbar;
     View root;
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         permissionMediator = PermissionX.init(this);
+        initFirebaseSDK();
         initInstances();
         createNotificationChannel();
 
@@ -93,15 +94,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void initFirebaseSDK() {
+        FirebaseApp.initializeApp(/*context=*/ this);
+        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+        AppCheckProviderFactory provider;
+        if (BuildConfig.DEBUG) {
+            provider = DebugAppCheckProviderFactory.getInstance();
+        } else {
+            provider = PlayIntegrityAppCheckProviderFactory.getInstance();
+        }
+        firebaseAppCheck.installAppCheckProviderFactory(provider);
+    }
+
     private void initInstances() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         root = findViewById(R.id.rootLayout);
         setSupportActionBar(toolbar);
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        final ViewPager viewPager = findViewById(R.id.viewPager);
         setupViewPager(viewPager);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabBtn);
+        FloatingActionButton fab = findViewById(R.id.fabBtn);
         fab.setOnClickListener(v -> setupViewPager(viewPager));
 
         // manual invocation not required in FCM
@@ -157,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -190,7 +203,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             context.unregisterReceiver(this);
-            Snackbar.make(root, "Subscribed to NITA push notifications", Snackbar.LENGTH_SHORT).show();
+            if (BuildConfig.DEBUG) {
+                Snackbar.make(root, "[DEBUG] push notifications enabled", Snackbar.LENGTH_LONG)
+                    .show();
+            } else {
+                Snackbar.make(root, "Subscribed to NITA push notifications", Snackbar.LENGTH_LONG)
+                    .show();
+            }
         }
     }
 }

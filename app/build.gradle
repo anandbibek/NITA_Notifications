@@ -16,6 +16,10 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId "org.nita.notifications"
         minSdkVersion 19
@@ -55,13 +59,18 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
 
-    /* firebase */
-    implementation 'com.google.firebase:firebase-messaging:23.1.2'
-    implementation 'com.google.firebase:firebase-analytics:21.3.0'
+
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:32.1.1"))
+
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
+    // dependencies for the App Check libraries
+    implementation "com.google.firebase:firebase-appcheck-playintegrity"
+    implementation "com.google.firebase:firebase-appcheck-debug"
 
     // 3rd party
     implementation 'org.jsoup:jsoup:1.13.1'
-    implementation 'com.karumi:dexter:6.2.1'
     implementation 'com.guolindev.permissionx:permissionx:1.7.1'
 
 

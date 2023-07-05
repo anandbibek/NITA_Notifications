@@ -20,21 +20,19 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-
+import android.widget.Toast;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import androidx.preference.PreferenceManager;
 import com.google.firebase.messaging.FirebaseMessaging;
-
-import java.util.Arrays;
+import org.nita.notifications.BuildConfig;
 
 public class RegistrationIntentService extends IntentService {
 
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
     private static final String TAG = RegistrationIntentService.class.getName();
-    //private static final String[] TOPICS = {"test"};
-    private static final String[] TOPICS = {"release"};
+    private static final String TOPIC_DEBUG = "test";
+    private static final String TOPIC_RELEASE = "release";
 
     public RegistrationIntentService() {
         super(TAG);
@@ -96,18 +94,34 @@ public class RegistrationIntentService extends IntentService {
      * Subscribe to any FCM topics of interest, as defined by the TOPICS constant.
      */
     private void subscribeTopics() {
-        for (String topic : TOPICS) {
-            FirebaseMessaging pubSub = FirebaseMessaging.getInstance();
-            pubSub.subscribeToTopic(topic);
-        }
-        Log.i(TAG, "Subscribed to topics " + Arrays.toString(TOPICS));
+        FirebaseMessaging pubSub = FirebaseMessaging.getInstance();
+        pubSub.subscribeToTopic(getTopic()).addOnCompleteListener(
+            task -> {
+                String msg = "Website notification subscribed";
+                if (!task.isSuccessful()) {
+                    msg = "Website notification subscription failed";
+                }
+                Log.d(TAG, msg);
+                Toast.makeText(RegistrationIntentService.this, msg, Toast.LENGTH_SHORT).show();
+            });
+
     }
 
     private void unSubscribeTopics() {
-        for (String topic : TOPICS) {
-            FirebaseMessaging pubSub = FirebaseMessaging.getInstance();
-            pubSub.unsubscribeFromTopic(topic);
-        }
-        Log.i(TAG, "Unsubscribed from topics " + Arrays.toString(TOPICS));
+        FirebaseMessaging pubSub = FirebaseMessaging.getInstance();
+        pubSub.unsubscribeFromTopic(getTopic()).addOnCompleteListener(
+            task -> {
+                String msg = "Website notification unsubscribed";
+                if (!task.isSuccessful()) {
+                    msg = "Website notification un-subscription failed";
+                }
+                Log.d(TAG, msg);
+                Toast.makeText(RegistrationIntentService.this, msg, Toast.LENGTH_SHORT).show();
+            });
+
+    }
+
+    private String getTopic() {
+        return BuildConfig.DEBUG ? TOPIC_DEBUG : TOPIC_RELEASE;
     }
 }
