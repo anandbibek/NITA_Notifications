@@ -10,33 +10,38 @@ namespace ananda\nita\notifications\cron\Storage;
 use DOMDocument;
 use DOMXPath;
 
-$data_url = 'https://nita.ac.in';
-$req_url = 'https://fcm.googleapis.com/fcm/send';
 
+require_once 'vendor/autoload.php';
+use Google\Client;
+use Google\Service\FirebaseCloudMessaging;
+use Google\Exception;
 
 # [START gae_storage_customization]
 use Google\Cloud\Storage\StorageClient;
-require_once __DIR__ . '/vendor/autoload.php';
 
 $defaultBucketName = sprintf('%s.appspot.com', getenv('GOOGLE_CLOUD_PROJECT'));
 $storage = new StorageClient();
 $storage->registerStreamWrapper();
 
-$time_file = "gs://${defaultBucketName}/last_update_time.txt";
-$data_file = "gs://${defaultBucketName}/last_update_notices.txt";
-$time_file_debug = "gs://${defaultBucketName}/last_update_time_debug.txt";
+$time_file = "gs://{$defaultBucketName}/last_update_time.txt";
+$data_file = "gs://{$defaultBucketName}/last_update_notices.txt";
+$token_file = "gs://{$defaultBucketName}/token.cache";
+$topic = "release";
 # [END gae_storage_customization]
 
 // standard file names for local run
 // $time_file = 'last_update_time.txt';
 // $data_file = 'last_update_notices.txt';
-// $time_file_debug = 'last_update_time_debug.txt';
+// $token_file = 'token.cache';
+// $topic = "test";
 
+
+$data_url = 'https://nita.ac.in';
+$requrl = 'https://fcm.googleapis.com/v1/projects/nita-notifications/messages:send';
 $msg = '';
 $change = false;
 $new_notices = [];
 $old_notices = [];
-$key1 = 'AIzaSyATpu6HrtBbz61wgxCzue9nxXtd_AQbNsk';
 
 
 $h = get_headers($data_url, true);
@@ -50,7 +55,6 @@ if (($time_new == "") || ($time_new == $time_old)) {
     echo $msg;
 } else {
     file_put_contents($time_file, $time_new);
-    file_put_contents($time_file_debug, $time_old);
 
 
     $doc = new DomDocument();
@@ -100,7 +104,7 @@ if (($time_new == "") || ($time_new == $time_old)) {
             if ($msg != "") {
                 $msg = $msg . "\n";
             }
-            $msg = $msg . "* " . $newVal;
+            $msg = $msg . "• " . $newVal;
         }
 
     }
@@ -109,31 +113,110 @@ if (($time_new == "") || ($time_new == $time_old)) {
     if ($change) {
         file_put_contents($data_file, serialize($new_notices));
 
-        //for release version users
-        $fields = array(
-            'to' => '/topics/release',
-            'data' => array("message" => $msg),
-        );
+        $token = getOAUTHToken();
+        sendNotification($topic, "NITA Updates", $msg, array("message" => $msg), $token, $requrl);
 
-        $context = [
-            'http' => [
-                'method' => 'POST',
-                'header' => "Authorization: key=" . $key1 . "\r\n" .
-                    "Content-Type: application/json\r\n",
-                'content' => json_encode($fields)
+    } else {
+        //date_default_timezone_set('Asia/Kolkata'); // your user's timezone
+        //$adjusted_time = date('Y-m-d H:i',strtotime("$time_new UTC"));
+        $msg = "NITA Website updated on " . $time_new . ". No new notice.";
+    }
+
+    log(LOG_INFO, $msg);
+
+}
+
+
+function getOAUTHToken()
+{
+    $client = new Client();
+    try {
+        $client->setAuthConfig("secrets/something.json");
+        $client->addScope(FirebaseCloudMessaging::FIREBASE_MESSAGING);
+
+        $savedTokenJson = readSavedToken();
+
+        if ($savedTokenJson) {
+            // the token exists, set it to the client and check if it's still valid
+            $client->setAccessToken($savedTokenJson);
+            $accessToken = $savedTokenJson;
+            if ($client->isAccessTokenExpired()) {
+                // the token is expired, generate a new token and set it to the client
+                $accessToken = generateToken($client);
+                $client->setAccessToken($accessToken);
+            }
+        } else {
+            // the token doesn't exist, generate a new token and set it to the client
+            $accessToken = generateToken($client);
+            $client->setAccessToken($accessToken);
+        }
+        
+
+        return $accessToken["access_token"];
+        
+    } catch (Exception $e) {
+        log(LOG_ERR, $e);
+    }
+   return false;
+}
+
+//Using a simple file to cache and read the toke, can store it in a databse also
+function readSavedToken() {
+    $tk = @file_get_contents('token.cache');
+    if ($tk) {
+        log(LOG_INFO, 'Reusing access token');
+        return json_decode($tk, true);
+    } else {
+        return false;
+    }
+  }
+
+function writeToken($tk) {
+    file_put_contents("token.cache",$tk);
+}
+
+function generateToken($client) {
+    $client->fetchAccessTokenWithAssertion();
+    $accessToken = $client->getAccessToken();
+
+    $tokenJson = json_encode($accessToken);
+    writeToken($tokenJson);
+    log(LOG_INFO, 'Generated new access token');
+    return $accessToken;
+}
+
+function sendNotification($topic, $title, $body, $data, $accessToken, $requrl) {
+
+    $payload = [
+        "message" => [
+            "topic" => $topic,
+            "notification"=>["title" => $title, "body"=> $body],
+            "data" => $data,
+            "android" => [
+                "notification"=>["icon" => 'ic_school_white_48dp', "color"=> '#990000'],
+                "priority" => "high"
+                ]
             ]
         ];
 
-        $context = stream_context_create($context);
-        $result = file_get_contents($req_url, false, $context);
-        echo "Response ::  " . $result;
+    $postdata = json_encode($payload);
+    $opts = array('http' =>
+        array(
+            'method'  => 'POST',
+            'header'  => 'Content-Type: application/json' . "\r\nAuthorization: Bearer $accessToken",
+            'content' => $postdata
+        )
+    );
 
-    } else {
-        date_default_timezone_set('Asia/Kolkata'); // your user's timezone
-        $adjusted_time = date('Y-m-d H:i',strtotime("$time_new UTC"));
-        $msg = "NITA Website updated on " . $adjusted_time . ". No new notice.";
-    }
+    $context  = stream_context_create($opts);
+    $result = file_get_contents($requrl, false, $context);
 
-    echo "Payload :: " . $msg;
+    log(LOG_INFO, "======RESPONSE======");
+    log(LOG_INFO, $result);
 
+}
+
+function log($level, $msg) {
+    echo $msg . '<br>';
+    syslog($level, $msg);
 }

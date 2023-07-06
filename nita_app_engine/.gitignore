@@ -6,3 +6,7 @@
 /build
 /captures
 *.iml
+/secrets/something.json
+last_update_notices.txt
+last_update_time.txt
+token.cache

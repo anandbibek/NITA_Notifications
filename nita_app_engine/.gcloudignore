@@ -20,4 +20,4 @@ composer.lock
 composer.phar
 last_update_time.txt
 last_update_notices.txt
-last_update_time_debug.txt
+token.cache
