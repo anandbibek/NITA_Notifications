@@ -192,10 +192,7 @@ function sendNotification($topic, $title, $body, $data, $accessToken, $requrl) {
             "topic" => $topic,
             "notification"=>["title" => $title, "body"=> $body],
             "data" => $data,
-            "android" => [
-                "notification"=>["icon" => 'ic_school_white_48dp', "color"=> '#990000'],
-                "priority" => "high"
-                ]
+            "android" => ["priority" => "high"]
             ]
         ];
 

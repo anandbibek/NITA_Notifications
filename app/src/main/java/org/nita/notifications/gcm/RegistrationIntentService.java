@@ -101,7 +101,7 @@ public class RegistrationIntentService extends IntentService {
                 if (!task.isSuccessful()) {
                     msg = "Website notification subscription failed";
                 }
-                Log.d(TAG, msg);
+                Log.d(TAG, msg + ". Topic: " + getTopic());
                 Toast.makeText(RegistrationIntentService.this, msg, Toast.LENGTH_SHORT).show();
             });
 
