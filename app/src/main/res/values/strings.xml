@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">NITA Notifications</string>
 
     <string name="action_settings">Settings</string>
     <string name="category_latest">Home</string>

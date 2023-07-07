@@ -3,33 +3,30 @@ package org.nita.notifications.fragments;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.google.android.material.snackbar.Snackbar;
-
-import org.nita.notifications.CustomRecyclerAdapter;
-import org.nita.notifications.LinkContainer;
-import org.nita.notifications.MainActivity;
-import org.nita.notifications.R;
-import org.nita.notifications.fetchers.FetcherAllNotice;
-import org.nita.notifications.fetchers.FetcherNewsEvents;
-import org.nita.notifications.fetchers.FetcherHome;
-import org.nita.notifications.fetchers.FetcherOrderCirculars;
-import org.nita.notifications.fetchers.FetcherStudentNotifications;
-import org.nita.notifications.fetchers.FetcherDownloadCorner;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import org.nita.notifications.CustomRecyclerAdapter;
+import org.nita.notifications.LinkContainer;
+import org.nita.notifications.MainActivity;
+import org.nita.notifications.R;
+import org.nita.notifications.fetchers.FetcherAllNotice;
+import org.nita.notifications.fetchers.FetcherDownloadCorner;
+import org.nita.notifications.fetchers.FetcherHome;
+import org.nita.notifications.fetchers.FetcherNewsEvents;
+import org.nita.notifications.fetchers.FetcherOrderCirculars;
+import org.nita.notifications.fetchers.FetcherStudentNotifications;
 
 /**
  * Created by Anand on 24-Aug-15.
@@ -71,7 +68,8 @@ public class MainNoticeFragment extends Fragment {
             new FileRetriever().execute(requireActivity().openFileInput(category));
         }catch (Exception e){
             //fall back to web if file read fails
-            e.printStackTrace();
+            //e.printStackTrace();
+            Log.d(MainNoticeFragment.class.getName(), e.getLocalizedMessage());
             new WebFetcher().execute(req_url);
         }
         setRetainInstance(true);

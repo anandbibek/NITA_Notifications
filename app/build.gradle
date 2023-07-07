@@ -24,17 +24,21 @@ android {
         applicationId "org.nita.notifications"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 302
-        versionName "3.0.2"
+        versionCode 303
+        versionName "3.0.3"
         multiDexEnabled true
     }
     buildTypes {
         release {
+            resValue "string", "app_name", "NITA Notifications"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.defconfig
         }
         debug {
+            resValue "string", "app_name", "xNITA Notifications"
+            applicationIdSuffix ".debug"
+            versionNameSuffix '-DEBUG'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
