@@ -3,16 +3,20 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     compileSdk 33
     namespace "org.nita.notifications"
 
     signingConfigs {
         defconfig {
-            keyAlias 'releasekey'
-            keyPassword 'android@123'
-            storeFile file('C:/Users/Anand/.android/release.keystore')
-            storePassword 'android@123'
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
 
@@ -24,8 +28,8 @@ android {
         applicationId "org.nita.notifications"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 303
-        versionName "3.0.3"
+        versionCode 304
+        versionName "3.0.4"
         multiDexEnabled true
     }
     buildTypes {
