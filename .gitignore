@@ -1,8 +1,11 @@
 .gradle
 /local.properties
-/.idea
+**/.idea
 .DS_Store
 /build
 /captures
 *.iml
 /keystore.properties
+
+**/secrets/something.json
+nita_cloud_function/nita.data.json
