@@ -12,7 +12,7 @@ The app is [available on Play Store](https://play.google.com/store/apps/details?
 
 ## Advantages
 
-The app does not run in the background or consume any resources. The website changes are checked centrally on a Google Cloud AppEngine Job every 2 hours from 7am to 10pm. If new contents are found on the website, push notifications are delivered to all users.  
+The app does not run in the background or consume any resources. The website changes are checked centrally through Google Cloud every 2 hours from 7am to 11pm. If new contents are found on the website, push notifications are delivered to all users.  
 
 
 
@@ -23,15 +23,19 @@ The app does not run in the background or consume any resources. The website cha
 ```mermaid
 graph LR
 A[MainActivity] --> B[MainNoticeFragment] -- Home --> F[FetcherHome] --> H(jsoup) --> fetch(Homepage Data)
-A[MainActivity] --> C[MainNoticeFragment] -- All Notices --> G[FetcherAllNotice] --> I(jsoup) --> fetch2(Notices Page Data)
+A[MainActivity] --> B -- All Notices --> G[FetcherAllNotice] --> I(jsoup) --> fetch2(Notices Page Data)
+A --> B -- ...others --> M[...others]
 
 ```
 
-### Structure (App Engine Backend)
+### Structure (Cloud Function Backend)
 
 ```mermaid
 graph LR
-A[CRON Job] --> B[cron.php] --> C{time change?} -- YES--> H(jsoup) --> fetch(Homepage Data) --> I{compare last saved data} --> J[send push notification]
+A[Cloud Scheduler] --> B[actions.py] --> C(sraper.py) --> fetch(Homepage Data) --> I(compare last saved data) --> J(messenger.py) --> K[send push notification]
+M[bsoup API] --> C
+N[cloud storage API] --> I
+O[FCM API] --> K
 
 ```
 
@@ -51,27 +55,30 @@ First let's get the Android app compiled and running.
 
 Now that the app is running, we would like to have the backend working so that push notifications can start working.
 
-- The code for app engine is entirely under folder `nita_app_engine`
-- Before we deploy the app, below pre-requisites need to be handled.
-- Install PHP on your system for local testing purposes.
+- The code for cloud function is entirely under folder `nita_cloud_function`
+- Before we deploy the function, below pre-requisites need to be handled.
+- Install Python on your system for local testing purposes.
 - Install the [Google Cloud SDK CLI](https://cloud.google.com/sdk/docs/install) to deploy the app later.
-- Set up the same Firebase Project we created for Android App on GCP [App Engine](https://console.cloud.google.com/appengine)
-- Make sure to enable [Cloud Storage Buckets](https://console.cloud.google.com/storage/browser) and [CRON Jobs](https://console.cloud.google.com/appengine/cronjobs) for the same project.
+- Set up the [Cloud Function](https://console.cloud.google.com/functions) on GCP for the same app that we used to create the Firebase Setup earlier.
+- Make sure to enable [Cloud Function](https://console.cloud.google.com/functions), [Cloud Run](https://console.cloud.google.com/run) and [Cloud Scheduler](https://console.cloud.google.com/cloudscheduler)  for the same project. 
 
 #### Backend Local Run
-- Comment out the part marked in `cron.php` that uses cloud buckets and instead uncomment the part which uses local files. This is required to run locally.
-- You need to put your [own firebase-sdk private key json](https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments) file for the app to be able to send push notifications to the project. Get your json file and put it in `secrets/something.json`. 
-- You can start a server in `nita_app_engine` with command `php -S localhost:8080`and access `cron.php` page at `localhost:8080/tasks/cron` on your browser. This will execute the logic under cron job.
+- Run `main_web.py` on your system. It will expose endpoints on localhost.
+- You need to put your [own firebase-sdk private key json](https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments) file for the app to be able to send push notifications to the project. Get your json file and put it in `secrets/something.json`.
 - If everything works, backend will update the files with new data. You can tinker with the existing data files to make it send push notification.
 
 #### Backend App Engine Deploy
-- Make sure you comment out/in the proper areas of `cron.php` again so that logic is using Cloud Storage instead of local files.
-- Deploy the app using Gcloud CLI with command `gcloud app deploy`
-- You can trigger a cron job from UI or wait till 2hrs, or whatever period of timing you've set. Also you can visit the `tasks/cron.php` endpoint on cloud to trigger the run.
+- Check the file `nita_cloud_function/set_project_properties.sh` and replace your project id. You can get the project id from GCP UI.
+- Deploy the app with command `sh deploy.sh`
+- Create the cloud scheduler job using command `sh schedule.sh`
+- You can trigger a cron job from Cloud Scheduler UI or wait till 2hrs, or whatever period of timing you've set.
+- To maintain risks to minimum, default deployment does not expose endpoints publicly. You could tinker with the values in `deploy.sh` if you feel so.
 
-> Please note that some of the services might need you to enable billing. Please take care not to run into huge unwanted costs due to oversight. Google makes it quite difficult to track the usages for beginners. Please do your due diligence while using GCP. The project here can run on free tier as usage and resource consumption is minimum. But there might be charges amounting to ₹5 to ₹10 while using Cloud Build during deploy. This is a bug with GCP  [mentioned here](https://stackoverflow.com/questions/62582129/multi-region-cloud-storage-charges#comment110963735_62584941)
+> Please note that some of the services might need you to enable billing. Please take care not to run into huge unwanted costs due to oversight. Google makes it quite difficult to track the usages for beginners. Please do your due diligence while using GCP. If you are running Cloud Functions version of the project, it can run on free tier as usage and resource consumption is minimum.
 
-> Please make sure you secure your endpoints and sensitive API keys so that they are not misused. Please follow the GCP security recommendations and do your due diligence while working with cloud.
+> If you are using older and discontinued App Engine version of this project, there might be charges amounting to ₹5 to ₹10 while using Cloud Build during deploy. This is a bug with GCP App Engine [mentioned here](https://stackoverflow.com/questions/62582129/multi-region-cloud-storage-charges#comment110963735_62584941). I had also written a [blog post on this](https://amiaudible.medium.com/google-cloud-app-engine-forced-charges-8b2efc06f137?source=friends_link&sk=5d32a73fa6067a31256f920b2807d936)
+
+> Please make sure you secure your endpoints and sensitive API keys so that they are not misused. Please follow the GCP security recommendations and do your due diligence while working with public cloud.
 
 
 ### Disclaimer  
