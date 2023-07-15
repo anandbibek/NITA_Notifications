@@ -21,9 +21,15 @@ def scan_nita():
     data_diff = get_diff_array(data_new, data_prev)
 
     if len(data_diff) > 0:
+        print("Updates available. Persisting")
         write_data_to_file(filename, data_new)
         body = "\n• ".join(data_diff)
-        send_notification("test", "NITA Updates", body)
+
+        # for debug builds
+        # send_notification(topic="test", title="xNITA Updates", body=body)
+
+        # for production build
+        send_notification(topic="release", title="NITA Updates", body=body)
 
     return jsonify(data=data_diff)
 

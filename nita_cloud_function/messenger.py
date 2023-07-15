@@ -12,6 +12,7 @@ else:
 
 def send_notification(topic, title, body):
     """Send FCM notification to a specific topic"""
+    print("Invoking FCM endpoint")
     message = messaging.Message(
         topic=topic,
         data={"message": body},
@@ -21,7 +22,8 @@ def send_notification(topic, title, body):
         )
     )
 
-    print('Payload:', message)
+    print('Topic: ', topic)
+    print('Payload: ', message)
     # Send a message to the devices subscribed to the provided topic.
     response = messaging.send(message)
     # Response is a message ID string.
