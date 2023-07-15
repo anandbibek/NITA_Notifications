@@ -1,5 +1,7 @@
 cron:
 - description: NITA Website polling
   url: /tasks/cron
-  schedule: every 2 hours from 07:00 to 22:00
+  schedule: every 5 hours from 03:00 to 04:00
   timezone: Asia/Kolkata
+
+# tried everything here but cron job neither gets deleted, nor updated

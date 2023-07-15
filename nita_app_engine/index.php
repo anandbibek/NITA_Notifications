@@ -13,7 +13,7 @@ switch (@parse_url($_SERVER['REQUEST_URI'])['path']) {
     case '/contact.php':
         require 'contact.php';
         break;
-    case '/tasks/cron':
+    case '/tasks/cron/actual':
         require 'cron.php';
         break;
     default:
