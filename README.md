@@ -1,7 +1,10 @@
-# NIT Agartala Notifications Android App
 
-The app is [available on Play Store](https://play.google.com/store/apps/details?id=org.nita.notifications&hl=en_IN&gl=US)
 
+
+NIT Agartala Notifications Android App
+=======================================
+
+<a href="https://play.google.com/store/apps/details?id=org.nita.notifications"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="70"></a>
 
 
 # App Features
@@ -83,7 +86,7 @@ Now that the app is running, we would like to have the backend working so that p
 
 ### Disclaimer  
 
--  Information on this app comes from the [NIT Agartala Website](https://nita.ac.in).  
+- Information on this app comes from the [NIT Agartala Website](https://nita.ac.in).  
 - This app does not represent any government or political entity.  
 - The app is not affiliated to NIT Agartala.
 
