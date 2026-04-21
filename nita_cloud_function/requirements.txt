@@ -4,5 +4,5 @@ google-cloud-storage==2.10.0
 
 requests==2.32.0
 Flask==2.2.5
-lxml==4.9.3
+lxml==6.1.0
 beautifulsoup4==4.12.2
